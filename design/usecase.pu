@@ -1,0 +1,41 @@
+@startuml usecase
+left to right direction
+
+actor User as u
+
+package ToolManager {
+  rectangle v_0_1_0_ToolManager {
+    usecase "List tools" as ListTools
+    usecase "Create tool" as CreateTool
+  }
+  rectangle v_0_2_0_ToolManager {
+    usecase "Update tool" as UpdateTool
+    usecase "Delete tool" as DeleteTool
+  }
+}
+
+package QATool {
+  rectangle v_0_1_0_QATool {
+    usecase "Ask" as AskToTool
+    usecase "Post Q&As" as PostQAs
+  }
+  rectangle v_0_2_0_QATool {
+    usecase "List Q&As" as ListQAs
+    usecase "Update Q&As" as UpdateQAs
+    usecase "Delete Q&As" as DeleteQAs
+  }
+}
+
+u --> ToolManager
+u ---> QATool
+
+note right of UpdateTool
+  This is used to update the detail of tool.
+  Not for update model.
+end note
+
+note right of AskToTool
+  Search related questions and answers from the model.
+end note
+
+@enduml
