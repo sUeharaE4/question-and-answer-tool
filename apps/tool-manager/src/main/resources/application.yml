@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOSTNAME}:${POSTGRES_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driverClassName: org.postgresql.Driver
+  flyway:
+    baseline-version: 0
+    enabled: true
+    baseline-on-migrate: true
+
+server:
+  port: ${TOOL_MANAGER_REST_PORT}

@@ -1,0 +1,17 @@
+CREATE TABLE tool (
+  id BIGSERIAL PRIMARY KEY
+  , name varchar(64)
+  , description varchar(1024)
+  , created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+  , updated_at TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE qa (
+  id BIGSERIAL PRIMARY KEY
+  , tool_id bigint NOT NULL
+  , question TEXT
+  , answer TEXT
+  , created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+  , updated_at TIMESTAMP WITH TIME ZONE
+  , FOREIGN KEY (tool_id) REFERENCES tool(id)
+);

@@ -1,0 +1,74 @@
+version: '3.8'
+services:
+
+  tool-manager:
+    build: ./tool-manager
+    environment:
+      - TOOL_MANAGER_REST_PORT=${TOOL_MANAGER_REST_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_HOSTNAME=${POSTGRES_HOSTNAME}
+    ports:
+      - ${TOOL_MANAGER_REST_PORT}:${TOOL_MANAGER_REST_PORT}
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - PGPORT=${POSTGRES_PORT}
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./dev-config/postgresql/init:/docker-entrypoint-initdb.d
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_VERSION}
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - http.port=${ELASTICSEARCH_PORT}
+    ports:
+      - ${ELASTICSEARCH_PORT}:${ELASTICSEARCH_PORT}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${KIBANA_VERSION}
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:${ELASTICSEARCH_PORT}
+      SERVER_PORT: ${KIBANA_PORT}
+    ports:
+       - ${KIBANA_PORT}:${KIBANA_PORT}
+
+  sonarqube:
+    image: sonarqube:community
+    hostname: sonarqube
+    container_name: sonarqube
+    depends_on:
+      - postgres
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://${POSTGRES_HOSTNAME}:${POSTGRES_PORT}/sonarqube
+      SONAR_JDBC_USERNAME: sonarqube
+      SONAR_JDBC_PASSWORD: sonarqube
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    ports:
+      - "9000:9000"
+volumes:
+  postgres:
+  elasticsearch:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
