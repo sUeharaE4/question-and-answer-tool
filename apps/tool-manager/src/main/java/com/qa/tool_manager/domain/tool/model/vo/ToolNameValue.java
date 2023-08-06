@@ -13,9 +13,6 @@ public class ToolNameValue implements ValueObject {
     @Size(max = 64, message = "Task name should not be longer than {max}.")
     private String value;
 
-    @Deprecated
-    ToolNameValue() {}
-
     public ToolNameValue(String value) {
         this.value = value;
         VOValidator.validate(this);

@@ -13,9 +13,6 @@ public class ToolDescriptionValue implements ValueObject {
     @Size(max = 1024, message = "Task description should not be longer than {max}.")
     private String value;
 
-    @Deprecated
-    ToolDescriptionValue() {}
-
     public ToolDescriptionValue(String value) {
         this.value = value;
         VOValidator.validate(this);

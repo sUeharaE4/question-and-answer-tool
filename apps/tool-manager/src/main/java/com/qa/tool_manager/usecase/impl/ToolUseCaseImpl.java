@@ -1,6 +1,7 @@
 package com.qa.tool_manager.usecase.impl;
 
 import com.qa.common_libs.dto.tool.ToolDTO;
+import com.qa.common_libs.exception.ResourceNotFoundException;
 import com.qa.tool_manager.domain.tool.model.ToolEntity;
 import com.qa.tool_manager.domain.tool.model.ToolEntityConverter;
 import com.qa.tool_manager.domain.tool.model.ToolService;
@@ -28,6 +29,11 @@ public class ToolUseCaseImpl implements ToolUseCase {
         Page<ToolEntity> pages = toolService.listAll(page);
         List<ToolDTO> dtos = pages.getContent().stream().map(ToolEntityConverter::toDTO).toList();
         return new PageImpl<>(dtos, page, pages.getTotalElements());
+    }
+
+    @Override
+    public ToolDTO findById(Long toolId) throws ResourceNotFoundException {
+        return ToolEntityConverter.toDTO(toolService.findById(toolId));
     }
 
 }

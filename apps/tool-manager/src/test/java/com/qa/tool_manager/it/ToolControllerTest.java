@@ -60,8 +60,8 @@ public class ToolControllerTest {
     @Test
     public void testCreateTool() throws Exception {
         ToolCreateRequest req = new ToolCreateRequest("name_001", "desc_001");
-        testClient.post().uri(baseUrl).bodyValue(req).exchange().expectBody(ToolDTO.class)
-                .consumeWith(result -> {
+        testClient.post().uri(baseUrl).bodyValue(req).exchange().expectStatus().isCreated()
+                .expectBody(ToolDTO.class).consumeWith(result -> {
                     ToolDTO res = result.getResponseBody();
                     Assertions.assertNotNull(res);
                     Assertions.assertEquals(1L, res.getId());
@@ -87,7 +87,20 @@ public class ToolControllerTest {
                         Assertions.assertEquals(desc, res.getDescription());
                     });
         }
-        testClient.get().uri(baseUrl).exchange().expectBody().jsonPath("$.numberOfElements")
-                .isEqualTo(postToolCount);
+        testClient.get().uri(baseUrl).exchange().expectStatus().isOk().expectBody()
+                .jsonPath("$.numberOfElements").isEqualTo(postToolCount);
+    }
+
+    @Test
+    public void testFindToolByIdNotFound() throws Exception {
+        testClient.get().uri(baseUrl + "/1").exchange().expectStatus().isBadRequest();
+    }
+
+    @Test
+    public void testFindToolById() throws Exception {
+        testClient.post().uri(baseUrl).bodyValue(new ToolCreateRequest("name", "description"))
+                .exchange().expectStatus().is2xxSuccessful();
+        testClient.get().uri(baseUrl + "/1").exchange().expectStatus().isOk().expectBody()
+                .jsonPath("id").isEqualTo(1L).jsonPath("name").isEqualTo("name");
     }
 }
