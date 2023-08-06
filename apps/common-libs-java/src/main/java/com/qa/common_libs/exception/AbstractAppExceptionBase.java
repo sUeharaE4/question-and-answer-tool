@@ -1,6 +1,6 @@
 package com.qa.common_libs.exception;
 
-public abstract class AbstractAppExceptionBase extends Exception {
+public abstract class AbstractAppExceptionBase extends RuntimeException {
 
     private String errKey = "can not specify the error key.";
     private String errMsg = "can not specify the error message.";

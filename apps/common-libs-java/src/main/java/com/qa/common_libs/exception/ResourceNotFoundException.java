@@ -1,6 +1,6 @@
 package com.qa.common_libs.exception;
 
-public class ResourceNotFoundException extends AbstractAppExceptionBase {
+public class ResourceNotFoundException extends AbstractUserErrorExceptionBase {
 
     public ResourceNotFoundException() {
         super();
