@@ -1,0 +1,34 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOSTNAME}:${POSTGRES_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driverClassName: org.postgresql.Driver
+  flyway:
+    baseline-version: 0
+    enabled: true
+    baseline-on-migrate: true
+
+server:
+  port: ${QA_TOOL_REST_PORT}
+
+logging:
+  level:
+    root: INFO
+    com.qa: DEBUG
+    org.hibernate:
+      SQL: DEBUG
+      type: TRACE
+      orm.jdbc.bind: TRACE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ${ACTUATOR_ENDPOINTS:health}
+
+app:
+  endpoints:
+    find_by_tool_id_fmt: "${TOOL_MANAGER_REST_URL}/api/v1.0/tools/%d"

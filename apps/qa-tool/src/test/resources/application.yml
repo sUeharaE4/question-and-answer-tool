@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+  flyway:
+    url: ${POSTGRES_JDBC_URL}
+    user: ${POSTGRES_USER_NAME}
+    password: ${POSTGRES_USER_PASSWORD}
+    cleanDisabled: false
+flyway:
+  cleanDisabled: false
+jpa:
+  hibernate:
+    ddl-auto: create
+
+app:
+  endpoints:
+    find_by_tool_id_fmt: "http://somehost:12345/api/v1.0/tools/%d"

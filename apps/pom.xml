@@ -22,6 +22,7 @@
 	<modules>
 		<module>common-libs-java</module>
 		<module>tool-manager</module>
+		<module>qa-tool</module>
 		<module>code-coverage-java</module>
 	</modules>
 	<dependencyManagement>
