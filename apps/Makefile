@@ -13,15 +13,15 @@ test-java:
 
 test: test-java
 
-sonarqube-docker:
-	cd ../
-	docker run --rm --network apps_default --platform linux/x86_64 -v "./question-and-answer-tool:/usr/src" \
-	  sonarsource/sonar-scanner-cli \
-	  -Dsonar.projectKey=question-and-answer-tool \
-	  -Dsonar.sources=. \
-	  -Dsonar.host.url=http://sonarqube:9000 \
-	  -Dsonar.token=${SONARQUBE_TOKEN} \
-	  -Dsonar.coverage.jacoco.xmlReportPaths=./apps/code-coverage-java/target/site/jacoco-aggregate/jacoco.xml
+# sonarqube-docker:
+# 	cd ../
+# 	docker run --rm --network apps_default --platform linux/x86_64 -v "./question-and-answer-tool:/usr/src" \
+# 	  sonarsource/sonar-scanner-cli \
+# 	  -Dsonar.projectKey=question-and-answer-tool \
+# 	  -Dsonar.sources=. \
+# 	  -Dsonar.host.url=http://sonarqube:9000 \
+# 	  -Dsonar.token=${SONARQUBE_TOKEN} \
+# 	  -Dsonar.coverage.jacoco.xmlReportPaths=./apps/code-coverage-java/target/site/jacoco-aggregate/jacoco.xml
 
 sonarqube:
 	mvn sonar:sonar \
