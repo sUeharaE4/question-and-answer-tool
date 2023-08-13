@@ -32,3 +32,15 @@ management:
 app:
   endpoints:
     find_by_tool_id_fmt: "${TOOL_MANAGER_REST_URL}/api/v1.0/tools/%d"
+  queue:
+    name: ${AWS_SQS_NAME:qa.fifo}
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
+  sqs:
+    endpoint: ${AWS_SQS_ENDPOINT}
+    region:
+      static: ${AWS_REGION}
