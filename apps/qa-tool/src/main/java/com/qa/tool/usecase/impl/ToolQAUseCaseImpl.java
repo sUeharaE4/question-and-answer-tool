@@ -2,6 +2,8 @@ package com.qa.tool.usecase.impl;
 
 import com.qa.common_libs.dto.qa.QADTO;
 import com.qa.common_libs.exception.ResourceNotFoundException;
+import com.qa.tool.domain.queue.config.AmazonSQSProperties;
+import com.qa.tool.domain.queue.model.AmazonSQSService;
 import com.qa.tool.domain.tool.model.ToolQAEntity;
 import com.qa.tool.domain.tool.model.ToolQAEntityConverter;
 import com.qa.tool.domain.tool.model.ToolQAService;
@@ -18,19 +20,24 @@ import java.util.List;
 public class ToolQAUseCaseImpl implements ToolQAUseCase {
 
     private final ToolQAService qaService;
+    private final AmazonSQSService sqsService;
+    private final AmazonSQSProperties sqsProperties;
 
     @Override
     public QADTO createQA(Long toolId, String question, String answer)
             throws ResourceNotFoundException {
         validateToolIsExist(toolId);
-        return ToolQAEntityConverter.toDTO(qaService.create(toolId, question, answer));
+        ToolQAEntity createdEntity = qaService.create(toolId, question, answer);
+        sendSqs(List.of(createdEntity.getId()));
+        return ToolQAEntityConverter.toDTO(createdEntity);
     }
 
     @Override
     public List<QADTO> createQAs(Long toolId, List<String> questions, List<String> answers) {
         validateToolIsExist(toolId);
-        return qaService.bulkInsert(toolId, questions, answers).stream()
-                .map(ToolQAEntityConverter::toDTO).toList();
+        List<ToolQAEntity> createdEntities = qaService.bulkInsert(toolId, questions, answers);
+        sendSqs(createdEntities.stream().map(ToolQAEntity::getId).toList());
+        return createdEntities.stream().map(ToolQAEntityConverter::toDTO).toList();
     }
 
     @Override
@@ -53,6 +60,10 @@ public class ToolQAUseCaseImpl implements ToolQAUseCase {
         }
         throw new ResourceNotFoundException("toolId",
                 String.format("Specified id is not exist: %d", toolId));
+    }
+
+    private void sendSqs(List<Long> upsertIds) {
+        sqsService.sendMessage(sqsProperties.getQueueName(), upsertIds);
     }
 
 }

@@ -10,6 +10,7 @@ spring:
     baseline-version: 0
     enabled: true
     baseline-on-migrate: true
+    table: flyway_schema_history_tool_manager
 
 server:
   port: ${TOOL_MANAGER_REST_PORT}

@@ -1,9 +1,13 @@
 package com.qa.tool.it;
 
+import com.amazonaws.services.sqs.AmazonSQSAsync;
+import com.amazonaws.services.sqs.model.CreateQueueRequest;
 import com.qa.common_libs.dto.qa.QACreateRequest;
 import com.qa.common_libs.dto.qa.QADTO;
 import com.qa.common_libs.dto.tool.ToolDTO;
+import com.qa.tool.domain.queue.config.AmazonSQSProperties;
 import com.qa.tool.domain.tool.model.ToolEndpointConfig;
+import com.qa.tool.it.EnableTestContainerContextCustomizerFactory.EnabledTestContainer;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,17 +20,11 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.client.RestTemplate;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 import java.util.ArrayList;
 import java.util.List;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -34,9 +32,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@Testcontainers
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
+@EnabledTestContainer
 public class ToolQAControllerTest {
 
     @Autowired
@@ -47,6 +45,10 @@ public class ToolQAControllerTest {
     private RestTemplate restTemplate;
     @Autowired
     private ToolEndpointConfig toolEndpointConfig;
+    @Autowired
+    AmazonSQSAsync amazonSQSAsync;
+    @Autowired
+    AmazonSQSProperties sqsProperties;
 
     @LocalServerPort
     private int port;
@@ -55,28 +57,12 @@ public class ToolQAControllerTest {
 
     private MockRestServiceServer mockServer;
 
-    @Container
-    private static final PostgreSQLContainer<?> postgres =
-            new PostgreSQLContainer<>(DockerImageName.parse("postgres")).withUsername("it")
-                    .withPassword("it").withDatabaseName("it");
-
-    @DynamicPropertySource
-    static void setup(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-
-        registry.add("POSTGRES_JDBC_URL", postgres::getJdbcUrl);
-        registry.add("POSTGRES_USER_NAME", postgres::getUsername);
-        registry.add("POSTGRES_USER_PASSWORD", postgres::getPassword);
-
-    }
-
     @BeforeEach
     public void cleanUp() {
         flyway.clean();
         flyway.migrate();
         mockServer = MockRestServiceServer.bindTo(restTemplate).build();
+        setupTestQueue();
     }
 
 
@@ -190,4 +176,17 @@ public class ToolQAControllerTest {
         return req;
     }
 
+    private void setupTestQueue() {
+        try {
+            String queueUrl =
+                    amazonSQSAsync.getQueueUrl(sqsProperties.getQueueName()).getQueueUrl();
+            amazonSQSAsync.deleteQueue(queueUrl);
+        } catch (Exception e) {
+            // if test queue does not exits, just create as usual.
+        }
+        CreateQueueRequest createReq =
+                new CreateQueueRequest().withQueueName(sqsProperties.getQueueName())
+                        .addAttributesEntry("FifoQueue", "true");
+        amazonSQSAsync.createQueue(createReq);
+    }
 }
