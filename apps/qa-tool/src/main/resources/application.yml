@@ -10,6 +10,7 @@ spring:
     baseline-version: 0
     enabled: true
     baseline-on-migrate: true
+    table: flyway_schema_history_qa
 
 server:
   port: ${QA_TOOL_REST_PORT}
