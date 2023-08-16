@@ -17,6 +17,11 @@ public class ToolDTO {
     @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
+    /**
+     * Create empty object.
+     *
+     * @deprecated No args constructor of this class is exist for SpringBoot libs.
+     */
     @Deprecated(since = "Used by auto")
     public ToolDTO() {}
 }
