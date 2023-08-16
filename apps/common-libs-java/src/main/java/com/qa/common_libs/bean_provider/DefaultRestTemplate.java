@@ -12,6 +12,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Configuration
 @Slf4j
@@ -27,7 +28,8 @@ public class DefaultRestTemplate {
                     ClientHttpRequestExecution execution) throws IOException {
                 log.info(String.format(
                         "Start to call external API. URL: %s, Method: %s, Request: %s",
-                        request.getURI().toASCIIString(), request.getMethod(), body.toString()));
+                        request.getURI().toASCIIString(), request.getMethod(),
+                        Arrays.toString(body)));
                 return execution.execute(request, body);
             }
         });
