@@ -32,9 +32,7 @@ public abstract class AbstractAppExceptionBase extends RuntimeException {
     }
 
     public ErrorData makeErrorData() {
-        ErrorData errorData = new ErrorData();
-        errorData.setErrKey(errKey);
-        errorData.setErrMsg(errMsg);
+        ErrorData errorData = new ErrorData(errKey, errMsg);
         return errorData;
     }
 
