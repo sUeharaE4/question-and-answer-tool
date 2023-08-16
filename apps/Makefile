@@ -23,8 +23,16 @@ test: test-java
 # 	  -Dsonar.token=${SONARQUBE_TOKEN} \
 # 	  -Dsonar.coverage.jacoco.xmlReportPaths=./apps/code-coverage-java/target/site/jacoco-aggregate/jacoco.xml
 
-sonarqube:
+sonarqube: test
 	mvn sonar:sonar \
 	  -Dsonar.host.url=http://localhost:9000 \
-	  -Dsonar.token=${SONARQUBE_TOKEN} \
-	  -Dsonar.login=${SONARQUBE_USER} -Dsonar.password=${SONARQUBE_PASSWORD}
+	  -Dsonar.token=${SONARQUBE_LOCAL_TOKEN} \
+	  -Dsonar.login=${SONARQUBE_LOCAL_USER} -Dsonar.password=${SONARQUBE_LOCAL_PASSWORD}
+
+sonarcloud: test
+	mvn sonar:sonar \
+	  -Dsonar.host.url=https://sonarcloud.io \
+	  -Dsonar.token=${SONAR_TOKEN} \
+	  -Dsonar.organization=sueharae4 \
+	  -Dsonar.projectKey=sUeharaE4_question-and-answer-tool \
+	  -Dsonar.coverage.jacoco.xmlReportPaths=$(CURDIR)/code-coverage-java/target/site/jacoco-aggregate/jacoco.xml
