@@ -5,27 +5,27 @@ public abstract class AbstractAppExceptionBase extends RuntimeException {
     private String errKey = "can not specify the error key.";
     private String errMsg = "can not specify the error message.";
 
-    public AbstractAppExceptionBase() {
+    protected AbstractAppExceptionBase() {
         super();
     }
 
-    public AbstractAppExceptionBase(String msg, Throwable cause) {
+    protected AbstractAppExceptionBase(String msg, Throwable cause) {
         super(msg, cause);
         this.errMsg = msg;
     }
 
-    public AbstractAppExceptionBase(String msg) {
+    protected AbstractAppExceptionBase(String msg) {
         super(msg);
         this.errMsg = msg;
     }
 
-    public AbstractAppExceptionBase(String key, String msg) {
+    protected AbstractAppExceptionBase(String key, String msg) {
         super(msg);
         this.errKey = key;
         this.errMsg = msg;
     }
 
-    public AbstractAppExceptionBase(String key, String msg, Throwable cause) {
+    protected AbstractAppExceptionBase(String key, String msg, Throwable cause) {
         super(msg, cause);
         this.errKey = key;
         this.errMsg = msg;
