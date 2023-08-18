@@ -43,6 +43,11 @@ public class ToolEntity extends AbstractTimeContainEntity {
         this.description = description;
     }
 
+    /**
+     * Create empty object.
+     *
+     * @deprecated No args constructor of this class is exist for SpringBoot libs.
+     */
     @Deprecated(since = "Default constructor is only allowed for Spring JPA")
     public ToolEntity() {}
 

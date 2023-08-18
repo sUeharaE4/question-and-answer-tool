@@ -48,6 +48,11 @@ public class ToolQAEntity extends AbstractTimeContainEntity {
         this.answer = answer;
     }
 
+    /**
+     * Create empty object.
+     *
+     * @deprecated No args constructor of this class is exist for SpringBoot libs.
+     */
     @Deprecated(since = "Default constructor is only allowed for Spring JPA")
     public ToolQAEntity() {}
 
