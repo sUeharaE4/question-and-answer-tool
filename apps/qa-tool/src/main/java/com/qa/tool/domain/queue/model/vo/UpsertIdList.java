@@ -22,8 +22,9 @@ public class UpsertIdList implements ValueObject {
         return "Upsert list: " + String.join(", ", value.stream().map(String::valueOf).toList());
     }
 
-    public String toSQSMessage() {
-        return String.join(",", value.stream().map(String::valueOf).toList());
+    public String toSQSMessage(Long toolId) {
+        String upsertIds = String.join(",", value.stream().map(String::valueOf).toList());
+        return String.format("{\"tool_id\":%d,\"upsert_ids\":[%s]}", toolId, upsertIds);
     }
 
 }

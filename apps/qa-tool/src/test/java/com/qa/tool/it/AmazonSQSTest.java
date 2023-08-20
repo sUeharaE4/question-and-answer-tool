@@ -45,12 +45,13 @@ public class AmazonSQSTest {
 
     @Test
     void testSend() throws InterruptedException {
-        sqsService.sendMessage(sqsProperties.getQueueName(), List.of(1L, 2L, 4L));
+        sqsService.sendMessage(sqsProperties.getQueueName(), 1L, List.of(1L, 2L, 4L));
 
         String queueUrl = amazonSQSAsync.getQueueUrl(sqsProperties.getQueueName()).getQueueUrl();
         ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queueUrl)
                 .withMaxNumberOfMessages(1).withWaitTimeSeconds(3);
         List<Message> messages = amazonSQSAsync.receiveMessage(receiveMessageRequest).getMessages();
-        Assertions.assertEquals("1,2,4", messages.get(0).getBody());
+        Assertions.assertEquals("{\"tool_id\":1,\"upsert_ids\":[1,2,4]}",
+                messages.get(0).getBody());
     }
 }

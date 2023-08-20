@@ -15,8 +15,8 @@ public class AmazonSQSService {
 
     private final QueueMessagingTemplate queueMessagingTemplate;
 
-    public void sendMessage(String queueName, List<Long> upsertIdList) {
-        String message = new UpsertIdList(upsertIdList).toSQSMessage();
+    public void sendMessage(String queueName, Long toolId, List<Long> upsertIdList) {
+        String message = new UpsertIdList(upsertIdList).toSQSMessage(toolId);
         Map<String, Object> messageHeader = Map.of(SqsMessageHeaders.SQS_GROUP_ID_HEADER,
                 "upsert_id", SqsMessageHeaders.SQS_DEDUPLICATION_ID_HEADER, "upsert_id");
         queueMessagingTemplate.send(queueName,

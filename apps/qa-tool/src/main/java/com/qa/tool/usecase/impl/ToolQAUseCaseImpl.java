@@ -28,7 +28,7 @@ public class ToolQAUseCaseImpl implements ToolQAUseCase {
             throws ResourceNotFoundException {
         validateToolIsExist(toolId);
         ToolQAEntity createdEntity = qaService.create(toolId, question, answer);
-        sendSqs(List.of(createdEntity.getId()));
+        sendSqs(toolId, List.of(createdEntity.getId()));
         return ToolQAEntityConverter.toDTO(createdEntity);
     }
 
@@ -36,7 +36,7 @@ public class ToolQAUseCaseImpl implements ToolQAUseCase {
     public List<QADTO> createQAs(Long toolId, List<String> questions, List<String> answers) {
         validateToolIsExist(toolId);
         List<ToolQAEntity> createdEntities = qaService.bulkInsert(toolId, questions, answers);
-        sendSqs(createdEntities.stream().map(ToolQAEntity::getId).toList());
+        sendSqs(toolId, createdEntities.stream().map(ToolQAEntity::getId).toList());
         return createdEntities.stream().map(ToolQAEntityConverter::toDTO).toList();
     }
 
@@ -62,8 +62,8 @@ public class ToolQAUseCaseImpl implements ToolQAUseCase {
                 String.format("Specified id is not exist: %d", toolId));
     }
 
-    private void sendSqs(List<Long> upsertIds) {
-        sqsService.sendMessage(sqsProperties.getQueueName(), upsertIds);
+    private void sendSqs(Long toolId, List<Long> upsertIds) {
+        sqsService.sendMessage(sqsProperties.getQueueName(), toolId, upsertIds);
     }
 
 }
