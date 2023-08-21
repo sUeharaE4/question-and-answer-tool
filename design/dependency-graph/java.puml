@@ -1,0 +1,18 @@
+@startuml
+skinparam defaultTextAlignment center
+skinparam rectangle {
+  BackgroundColor<<optional>> beige
+  BackgroundColor<<test>> lightGreen
+  BackgroundColor<<runtime>> lightBlue
+  BackgroundColor<<provided>> lightGray
+}
+rectangle "tool-manager" as com_qa_tool_manager_tool_manager_jar_compile
+rectangle "common-libs-java" as com_qa_common_libs_java_common_libs_java_jar_compile
+rectangle "qa-tool" as com_qa_qa_tool_qa_tool_jar_compile
+rectangle "code-coverage-java" as com_qa_code_coverage_java_code_coverage_java_jar_compile
+com_qa_tool_manager_tool_manager_jar_compile -[#000000]-> com_qa_common_libs_java_common_libs_java_jar_compile
+com_qa_qa_tool_qa_tool_jar_compile -[#000000]-> com_qa_common_libs_java_common_libs_java_jar_compile
+com_qa_code_coverage_java_code_coverage_java_jar_compile -[#000000]-> com_qa_common_libs_java_common_libs_java_jar_compile
+com_qa_code_coverage_java_code_coverage_java_jar_compile -[#000000]-> com_qa_tool_manager_tool_manager_jar_compile
+com_qa_code_coverage_java_code_coverage_java_jar_compile -[#000000]-> com_qa_qa_tool_qa_tool_jar_compile
+@enduml
