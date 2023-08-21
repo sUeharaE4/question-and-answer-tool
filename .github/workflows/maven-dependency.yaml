@@ -28,6 +28,7 @@ jobs:
       - name: Create graph
         working-directory: apps
         run: |
+          cp .env.sample .env
           make graph
       - name: Count uncommitted files
         id: check_diff

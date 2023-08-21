@@ -39,6 +39,7 @@ jobs:
       - name: Execute migration
         working-directory: apps
         run: |
+          cp .env.sample .env
           echo y | make migrate
       - name: Execute tbls
         working-directory: apps
