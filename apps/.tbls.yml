@@ -1,0 +1,3 @@
+# tbls is used in CI process so we don't have to use environment variables
+dsn: postgres://postgres:postgres@localhost:5432/qa?sslmode=disable
+docPath: ../design/db/schema

@@ -145,6 +145,27 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<!-- used in ci to create tmp database -->
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>${flyway.version}</version>
+				<configuration>
+					<url>
+						jdbc:postgresql://localhost:5432/qa
+					</url>
+					<user>postgres</user>
+					<password>postgres</password>
+					<schemas>
+						<schema>public</schema>
+					</schemas>
+					<baselineOnMigrate>true</baselineOnMigrate>
+					<table>flyway_schema_history_qa</table>
+					<baselineVersion>0</baselineVersion>
+					<baselineDescription>Initial</baselineDescription>
+					<locations>classpath:/db/migration</locations>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

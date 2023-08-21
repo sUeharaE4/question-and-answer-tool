@@ -12,6 +12,7 @@
 		<testcontainers.version>1.18.3</testcontainers.version>
 		<jacoco.version>0.8.8</jacoco.version>
 		<jackson.version>2.15.2</jackson.version>
+		<flyway.version>9.21.1</flyway.version>
 	</properties>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.qa</groupId>
@@ -76,7 +77,7 @@
 			<dependency>
 				<groupId>org.flywaydb</groupId>
 				<artifactId>flyway-core</artifactId>
-				<version>9.21.1</version>
+				<version>${flyway.version}</version>
 			</dependency>
 
 			<dependency>
