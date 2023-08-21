@@ -31,10 +31,6 @@ jobs:
         working-directory: apps
         run: |
           cp .env.sample .env
-          make build-java
-          cd common-libs-java
-          mvn install
-          cd ../
           make graph
       - name: Count uncommitted files
         id: check_diff

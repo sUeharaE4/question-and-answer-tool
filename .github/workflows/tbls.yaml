@@ -40,6 +40,10 @@ jobs:
         working-directory: apps
         run: |
           cp .env.sample .env
+          make build-java
+          cd common-libs-java
+          mvn install
+          cd ../
           echo y | make migrate
       - name: Execute tbls
         working-directory: apps
