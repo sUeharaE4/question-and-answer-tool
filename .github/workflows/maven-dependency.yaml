@@ -34,6 +34,7 @@ jobs:
           make build-java
           cd common-libs-java
           mvn install
+          cd ../
           make graph
       - name: Count uncommitted files
         id: check_diff
