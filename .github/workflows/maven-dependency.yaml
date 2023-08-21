@@ -1,0 +1,56 @@
+name: update dependency graph
+on:
+  pull_request:
+    paths:
+      - apps/**/pom.xml
+      - .github/workflows/maven-dependency.yaml
+jobs:
+  build:
+    name: generate-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'corretto'
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Create graph
+        working-directory: apps
+        run: |
+          make graph
+      - name: Count uncommitted files
+        id: check_diff
+        run: |
+          git status --porcelain | wc -l
+          file_count=$(git status --porcelain | wc -l)
+          echo "::set-output name=file_count::$file_count"
+      - name: Commit graph
+        if: ${{ steps.check_diff.outputs.file_count != '0' }}
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "generate dependency graph from actions"
+          git push
+      - name: Report commit on pull request
+        if: ${{ steps.check_diff.outputs.file_count != '0' }}
+        uses: actions/github-script@v4
+        with:
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Actions committed new graph files!'
+            })
