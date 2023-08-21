@@ -32,6 +32,8 @@ jobs:
         run: |
           cp .env.sample .env
           make build-java
+          cd common-libs-java
+          mvn install
           make graph
       - name: Count uncommitted files
         id: check_diff
