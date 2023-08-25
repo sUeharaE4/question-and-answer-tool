@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.qa</groupId>
 		<artifactId>root</artifactId>
-		<version>${project.version}</version>
+		<version>0.0.1</version>
 	</parent>
 	<groupId>com.qa.tool-manager</groupId>
 	<artifactId>tool-manager</artifactId>
@@ -17,7 +17,7 @@
 		<dependency>
 			<groupId>com.qa.common-libs-java</groupId>
 			<artifactId>common-libs-java</artifactId>
-			<version>${project.version}</version>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

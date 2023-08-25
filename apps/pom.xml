@@ -17,7 +17,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.qa</groupId>
 	<artifactId>root</artifactId>
-	<version>${project.version}</version>
+	<version>0.0.1</version>
 	<name>QuestionAndAnswerTool</name>
 	<description>Create and use QA tools</description>
 	<packaging>pom</packaging>
