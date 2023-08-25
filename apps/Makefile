@@ -1,7 +1,7 @@
 include .env
 
 build-java:
-	mvn clean package -DskipTests=true
+	mvn clean install -DskipTests=true
 
 build-docker:
 	docker compose build
@@ -12,6 +12,18 @@ test-java:
 	mvn clean test jacoco:report-aggregate
 
 test: test-java
+
+graph:
+	mvn com.github.ferstl:depgraph-maven-plugin:4.0.2:aggregate -DgraphFormat=puml -DcreateImage=false -DreduceEdges=false -Dscope=compile "-Dincludes=com.qa.*:*"
+	mv target/dependency-graph.puml ../design/dependency-graph/java.puml
+	cat ../design/dependency-graph/java.puml | docker run --rm -i think/plantuml -tsvg > ../design/dependency-graph/java.svg
+
+migrate:
+	@read -p "This command execute DB migration but migration should be done by applications. This command is provided only for CI process. Are you realy want to migrate? [y,N]:" ans; \
+	if [ "$$ans" = y ]; then  \
+	  mvn flyway:migrate -pl qa-tool; \
+	  mvn flyway:migrate -pl tool-manager; \
+	fi
 
 # sonarqube-docker:
 # 	cd ../

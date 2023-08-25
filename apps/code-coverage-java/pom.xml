@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.qa</groupId>
 		<artifactId>root</artifactId>
-		<version>${project.version}</version>
+		<version>0.0.1</version>
 	</parent>
 	<groupId>com.qa.code-coverage-java</groupId>
 	<artifactId>code-coverage-java</artifactId>
@@ -17,17 +17,17 @@
 		<dependency>
 			<groupId>com.qa.common-libs-java</groupId>
 			<artifactId>common-libs-java</artifactId>
-			<version>${project.version}</version>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.qa.tool-manager</groupId>
 			<artifactId>tool-manager</artifactId>
-			<version>${project.version}</version>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.qa.qa-tool</groupId>
 			<artifactId>qa-tool</artifactId>
-			<version>${project.version}</version>
+			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
 

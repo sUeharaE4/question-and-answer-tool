@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.qa</groupId>
 		<artifactId>root</artifactId>
-		<version>${project.version}</version>
+		<version>0.0.1</version>
 	</parent>
 	<groupId>com.qa.qa-tool</groupId>
 	<artifactId>qa-tool</artifactId>
@@ -17,7 +17,7 @@
 		<dependency>
 			<groupId>com.qa.common-libs-java</groupId>
 			<artifactId>common-libs-java</artifactId>
-			<version>${project.version}</version>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -144,6 +144,22 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<!-- used in ci to create tmp database -->
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>${flyway.version}</version>
+				<configuration>
+					<configFiles>
+						<configFile>../flyway.conf.actions</configFile>
+					</configFiles>
+					<baselineOnMigrate>true</baselineOnMigrate>
+					<table>flyway_schema_history_qa</table>
+					<baselineVersion>0</baselineVersion>
+					<baselineDescription>Initial</baselineDescription>
+					<locations>classpath:/db/migration</locations>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

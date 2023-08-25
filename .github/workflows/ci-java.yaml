@@ -5,6 +5,11 @@ on:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
+    paths:
+      - .github/workflows/ci-java.yaml
+      - apps/**/*.java
+      - apps/**/pom.xml
+      - apps/**/*.sql
 jobs:
   build:
     name: Build and analyze
