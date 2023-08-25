@@ -151,14 +151,9 @@
 				<artifactId>flyway-maven-plugin</artifactId>
 				<version>${flyway.version}</version>
 				<configuration>
-					<url>
-						jdbc:postgresql://localhost:5432/qa
-					</url>
-					<user>postgres</user>
-					<password>postgres</password>
-					<schemas>
-						<schema>public</schema>
-					</schemas>
+					<configFiles>
+						<configFile>../flyway.conf.actions</configFile>
+					</configFiles>
 					<baselineOnMigrate>true</baselineOnMigrate>
 					<table>flyway_schema_history_qa</table>
 					<baselineVersion>0</baselineVersion>
