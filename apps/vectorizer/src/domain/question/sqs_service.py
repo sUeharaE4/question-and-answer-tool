@@ -5,8 +5,8 @@ import boto3
 import requests
 from pydantic.dataclasses import dataclass
 
-from ...config.application_properties import get_settings
-from ..question.model.question import Question
+from config.application_properties import get_settings
+from domain.question.model.question import Question
 
 
 @dataclass
